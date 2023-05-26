@@ -125,5 +125,5 @@ class Server:
             client.close()
 
 if __name__ == "__main__":
-    server = Server("127.0.0.1", 4202)
+    server = Server("212.109.199.128", 4202)
     server.start()
